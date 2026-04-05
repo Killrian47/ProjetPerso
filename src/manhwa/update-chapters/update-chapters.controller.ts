@@ -1,0 +1,16 @@
+import { Controller, Patch, Param, Body, ParseIntPipe } from '@nestjs/common';
+import { UpdateChaptersManhwaService } from './update-chapters.service.js';
+import { UpdateChaptersDto } from './update-chapters.dto.js';
+
+@Controller()
+export class UpdateChaptersManhwaController {
+  constructor(private readonly updateChaptersService: UpdateChaptersManhwaService) {}
+
+  @Patch('/manhwa/:id/addChapters')
+  async addChapters(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() dto: UpdateChaptersDto,
+  ) {
+    return this.updateChaptersService.addChapters(id, dto.value);
+  }
+}
