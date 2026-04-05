@@ -158,4 +158,85 @@ describe('UpdateChaptersManhua (US 8)', () => {
       expect(result.nombreDeChapitresLus).toBe(90);
     });
   });
+
+  // ===== US 11 — Supprimer chapitres lus =====
+
+  // ✅ Scénario 1 — Suppression simple
+  describe('US 11 — Suppression simple chapitre lu', () => {
+    it('devrait décrémenter de 1 le nombre de chapitres lus', async () => {
+      const manhua = { id: 1, titre: 'Soul Land', nombreDeChapitres: 100, nombreDeChapitresLus: 50, activé: true };
+
+      mockRepository.findOneBy.mockResolvedValue({ ...manhua });
+      mockRepository.save.mockResolvedValue({ ...manhua, nombreDeChapitresLus: 49 });
+
+      const result = await controller.removeReadChapters(1, { value: 1 });
+
+      expect(result.nombreDeChapitresLus).toBe(49);
+      expect(mockRepository.save).toHaveBeenCalled();
+    });
+  });
+
+  // ✅ Scénario 2 — Suppression multiple
+  describe('US 11 — Suppression multiple chapitres lus', () => {
+    it('devrait décrémenter de 10 le nombre de chapitres lus', async () => {
+      const manhua = { id: 1, titre: 'Soul Land', nombreDeChapitres: 100, nombreDeChapitresLus: 50, activé: true };
+
+      mockRepository.findOneBy.mockResolvedValue({ ...manhua });
+      mockRepository.save.mockResolvedValue({ ...manhua, nombreDeChapitresLus: 40 });
+
+      const result = await controller.removeReadChapters(1, { value: 10 });
+
+      expect(result.nombreDeChapitresLus).toBe(40);
+    });
+  });
+
+  // ❌ Scénario 3 — Descendre sous 0
+  describe('US 11 — Descendre sous 0 interdit', () => {
+    it('devrait retourner une erreur si lus passe sous 0', async () => {
+      const manhua = { id: 1, titre: 'Soul Land', nombreDeChapitres: 100, nombreDeChapitresLus: 5, activé: true };
+
+      mockRepository.findOneBy.mockResolvedValue({ ...manhua });
+
+      await expect(controller.removeReadChapters(1, { value: 10 })).rejects.toThrow(BadRequestException);
+    });
+  });
+
+  // ❌ Scénario 4 — Valeur négative invalide
+  describe('US 11 — Valeur négative invalide', () => {
+    it('devrait retourner une erreur si la valeur est négative', async () => {
+      const manhua = { id: 1, titre: 'Soul Land', nombreDeChapitres: 100, nombreDeChapitresLus: 50, activé: true };
+
+      mockRepository.findOneBy.mockResolvedValue({ ...manhua });
+
+      await expect(controller.removeReadChapters(1, { value: -5 })).rejects.toThrow(BadRequestException);
+    });
+  });
+
+  // ❌ Scénario 5 — Indépendance avec total
+  describe('US 11 — Aucun impact sur total', () => {
+    it('devrait ne pas modifier le nombre total de chapitres', async () => {
+      const manhua = { id: 1, titre: 'Soul Land', nombreDeChapitres: 100, nombreDeChapitresLus: 50, activé: true };
+
+      mockRepository.findOneBy.mockResolvedValue({ ...manhua });
+      mockRepository.save.mockResolvedValue({ ...manhua, nombreDeChapitresLus: 40 });
+
+      const result = await controller.removeReadChapters(1, { value: 10 });
+
+      expect(result.nombreDeChapitres).toBe(100);
+    });
+  });
+
+  // ⚠️ Scénario 6 — Passage à 0 exact
+  describe('US 11 — Passage à 0 exact', () => {
+    it('devrait accepter si lus arrive à 0', async () => {
+      const manhua = { id: 1, titre: 'Soul Land', nombreDeChapitres: 100, nombreDeChapitresLus: 10, activé: true };
+
+      mockRepository.findOneBy.mockResolvedValue({ ...manhua });
+      mockRepository.save.mockResolvedValue({ ...manhua, nombreDeChapitresLus: 0 });
+
+      const result = await controller.removeReadChapters(1, { value: 10 });
+
+      expect(result.nombreDeChapitresLus).toBe(0);
+    });
+  });
 });
