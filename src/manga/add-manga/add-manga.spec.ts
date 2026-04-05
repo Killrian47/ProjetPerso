@@ -1,19 +1,20 @@
+import { describe, beforeEach, it, expect, jest } from '@jest/globals';
 import { Test, TestingModule } from '@nestjs/testing';
-import { AddMangaController } from './add-manga.controller';
-import { AddMangaService } from './add-manga.service';
-import { AddMangaDto } from './add-manga.dto';
+import { AddMangaController } from './add-manga.controller.js';
+import { AddMangaService } from './add-manga.service.js';
+import { AddMangaDto } from './add-manga.dto.js';
 import { BadRequestException } from '@nestjs/common';
 
 describe('AddManga (US 1)', () => {
   let controller: AddMangaController;
   let service: AddMangaService;
 
-  const mockRepository = {
+  const mockRepository: any = {
     create: jest.fn(),
     save: jest.fn(),
   };
 
-  const mockCloudinaryService = {
+  const mockCloudinaryService: any = {
     uploadImage: jest.fn(),
   };
 
