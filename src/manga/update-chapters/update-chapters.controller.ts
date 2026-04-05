@@ -13,4 +13,12 @@ export class UpdateChaptersMangaController {
   ) {
     return this.updateChaptersService.addChapters(id, dto.value);
   }
+
+  @Patch('/manga/:id/addReadChapters')
+  async addReadChapters(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() dto: UpdateChaptersDto,
+  ) {
+    return this.updateChaptersService.addReadChapters(id, dto.value);
+  }
 }
