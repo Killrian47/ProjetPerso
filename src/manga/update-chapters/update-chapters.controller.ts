@@ -29,4 +29,12 @@ export class UpdateChaptersMangaController {
   ) {
     return this.updateChaptersService.removeChapters(id, dto.value);
   }
+
+  @Patch('/manga/:id/removeReadChapters')
+  async removeReadChapters(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() dto: UpdateChaptersDto,
+  ) {
+    return this.updateChaptersService.removeReadChapters(id, dto.value);
+  }
 }

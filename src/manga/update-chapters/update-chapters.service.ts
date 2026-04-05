@@ -62,4 +62,22 @@ export class UpdateChaptersMangaService {
     manga.nombreDeChapitres -= value;
     return this.mangaRepository.save(manga);
   }
+
+  async removeReadChapters(id: number, value: number): Promise<Manga> {
+    if (value < 0) {
+      throw new BadRequestException('La valeur ne peut pas être négative');
+    }
+
+    const manga = await this.mangaRepository.findOneBy({ id });
+    if (!manga) {
+      throw new NotFoundException('Manga non trouvé');
+    }
+
+    if (manga.nombreDeChapitresLus - value < 0) {
+      throw new BadRequestException('Le nombre de chapitres lus ne peut pas être négatif');
+    }
+
+    manga.nombreDeChapitresLus -= value;
+    return this.mangaRepository.save(manga);
+  }
 }

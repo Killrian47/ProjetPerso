@@ -62,4 +62,22 @@ export class UpdateChaptersManhuaService {
     manhua.nombreDeChapitres -= value;
     return this.manhuaRepository.save(manhua);
   }
+
+  async removeReadChapters(id: number, value: number): Promise<Manhua> {
+    if (value < 0) {
+      throw new BadRequestException('La valeur ne peut pas être négative');
+    }
+
+    const manhua = await this.manhuaRepository.findOneBy({ id });
+    if (!manhua) {
+      throw new NotFoundException('Manhua non trouvé');
+    }
+
+    if (manhua.nombreDeChapitresLus - value < 0) {
+      throw new BadRequestException('Le nombre de chapitres lus ne peut pas être négatif');
+    }
+
+    manhua.nombreDeChapitresLus -= value;
+    return this.manhuaRepository.save(manhua);
+  }
 }

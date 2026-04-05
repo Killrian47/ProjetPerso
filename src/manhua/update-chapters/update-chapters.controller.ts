@@ -29,4 +29,12 @@ export class UpdateChaptersManhuaController {
   ) {
     return this.updateChaptersService.removeChapters(id, dto.value);
   }
+
+  @Patch('/manhua/:id/removeReadChapters')
+  async removeReadChapters(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() dto: UpdateChaptersDto,
+  ) {
+    return this.updateChaptersService.removeReadChapters(id, dto.value);
+  }
 }
