@@ -51,4 +51,32 @@ describe('UpdateChaptersManga (US 8)', () => {
       await expect(controller.addChapters(1, { value: -5 })).rejects.toThrow(BadRequestException);
     });
   });
+
+  // ===== US 9 — Ajouter chapitre lu =====
+
+  // ✅ Scénario 3 — Ajouter un chapitre lu
+  describe('US 9 — Ajouter un chapitre lu', () => {
+    it('devrait incrémenter le nombre de chapitres lus', async () => {
+      const manga = { id: 1, titre: 'One Piece', nombreDeChapitres: 100, nombreDeChapitresLus: 50, activé: true };
+
+      mockRepository.findOneBy.mockResolvedValue({ ...manga });
+      mockRepository.save.mockResolvedValue({ ...manga, nombreDeChapitresLus: 51 });
+
+      const result = await controller.addReadChapters(1, { value: 1 });
+
+      expect(result.nombreDeChapitresLus).toBe(51);
+      expect(mockRepository.save).toHaveBeenCalled();
+    });
+  });
+
+  // ❌ Scénario 4 — chapitres_lus > total interdit
+  describe('US 9 — chapitres_lus > total interdit', () => {
+    it('devrait retourner une erreur si chapitres_lus dépasse le total', async () => {
+      const manga = { id: 1, titre: 'One Piece', nombreDeChapitres: 100, nombreDeChapitresLus: 99, activé: true };
+
+      mockRepository.findOneBy.mockResolvedValue({ ...manga });
+
+      await expect(controller.addReadChapters(1, { value: 5 })).rejects.toThrow(BadRequestException);
+    });
+  });
 });
