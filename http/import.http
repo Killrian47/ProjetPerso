@@ -1,0 +1,8 @@
+### Importer des mangas (source mangaplus)
+POST http://localhost:3000/import/manga
+
+### Importer des manhwas (source raijinscan)
+POST http://localhost:3000/import/manhwa
+
+### Importer des manhuas (source raijinscan)
+POST http://localhost:3000/import/manhua

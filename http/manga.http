@@ -1,0 +1,58 @@
+### Ajouter un manga
+POST http://localhost:3000/addManga
+Content-Type: application/json
+
+{
+  "titre": "One Piece",
+  "auteur": "Eiichiro Oda",
+  "nombreDeChapitres": 1100
+}
+
+### Ajouter un manga avec image
+POST http://localhost:3000/addManga
+Content-Type: application/json
+
+{
+  "titre": "Naruto",
+  "auteur": "Masashi Kishimoto",
+  "nombreDeChapitres": 700,
+  "image": "base64-image-data"
+}
+
+### Voir tous les mangas
+GET http://localhost:3000/getAllManga
+
+### Ajouter des chapitres
+PATCH http://localhost:3000/manga/1/addChapters
+Content-Type: application/json
+
+{
+  "value": 5
+}
+
+### Ajouter des chapitres lus
+PATCH http://localhost:3000/manga/1/addReadChapters
+Content-Type: application/json
+
+{
+  "value": 3
+}
+
+### Supprimer des chapitres
+PATCH http://localhost:3000/manga/1/removeChapters
+Content-Type: application/json
+
+{
+  "value": 2
+}
+
+### Supprimer des chapitres lus
+PATCH http://localhost:3000/manga/1/removeReadChapters
+Content-Type: application/json
+
+{
+  "value": 1
+}
+
+### Désactiver un manga
+PATCH http://localhost:3000/disableManga/1

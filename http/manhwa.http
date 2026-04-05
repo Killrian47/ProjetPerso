@@ -1,0 +1,56 @@
+### Ajouter un manhwa
+POST http://localhost:3000/addManhwa
+Content-Type: application/json
+
+{
+  "titre": "Solo Leveling",
+  "nombreDeChapitres": 200
+}
+
+### Ajouter un manhwa avec image
+POST http://localhost:3000/addManhwa
+Content-Type: application/json
+
+{
+  "titre": "Tower of God",
+  "nombreDeChapitres": 550,
+  "image": "base64-image-data"
+}
+
+### Voir tous les manhwas
+GET http://localhost:3000/getAllManhwa
+
+### Ajouter des chapitres
+PATCH http://localhost:3000/manhwa/1/addChapters
+Content-Type: application/json
+
+{
+  "value": 5
+}
+
+### Ajouter des chapitres lus
+PATCH http://localhost:3000/manhwa/1/addReadChapters
+Content-Type: application/json
+
+{
+  "value": 3
+}
+
+### Supprimer des chapitres
+PATCH http://localhost:3000/manhwa/1/removeChapters
+Content-Type: application/json
+
+{
+  "value": 2
+}
+
+### Supprimer des chapitres lus
+PATCH http://localhost:3000/manhwa/1/removeReadChapters
+Content-Type: application/json
+
+{
+  "value": 1
+}
+
+### Désactiver un manhwa
+PATCH http://localhost:3000/disableManhwa/1
