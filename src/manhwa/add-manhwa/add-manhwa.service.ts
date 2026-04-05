@@ -25,8 +25,8 @@ export class AddManhwaService {
       nombreDeChapitresLus: 0,
       activé: true,
       imageUrl: imageUrl ?? null,
-    });
+    } as Manhwa);
 
-    return this.manhwaRepository.save(manhwa);
+    return this.manhwaRepository.save(manhwa) as Promise<Manhwa>;
   }
 }

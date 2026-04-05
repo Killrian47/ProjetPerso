@@ -3,23 +3,23 @@ import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 @Entity()
 export class Manga {
   @PrimaryGeneratedColumn()
-  declare id: number;
+  id!: number;
 
   @Column()
-  declare titre: string;
+  titre!: string;
 
   @Column()
-  declare auteur: string;
+  auteur!: string;
 
-  @Column({ nullable: true })
-  declare imageUrl: string | null;
-
-  @Column({ default: 0 })
-  declare nombreDeChapitres: number;
+  @Column({ type: 'varchar', nullable: true })
+  imageUrl!: string | null;
 
   @Column({ default: 0 })
-  declare nombreDeChapitresLus: number;
+  nombreDeChapitres!: number;
+
+  @Column({ default: 0 })
+  nombreDeChapitresLus!: number;
 
   @Column({ default: true })
-  declare activé: boolean;
+  activé!: boolean;
 }

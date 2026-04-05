@@ -25,8 +25,8 @@ export class AddManhuaService {
       nombreDeChapitresLus: 0,
       activé: true,
       imageUrl: imageUrl ?? null,
-    });
+    } as Manhua);
 
-    return this.manhuaRepository.save(manhua);
+    return this.manhuaRepository.save(manhua) as Promise<Manhua>;
   }
 }
