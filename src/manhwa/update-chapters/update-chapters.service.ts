@@ -40,4 +40,26 @@ export class UpdateChaptersManhwaService {
     manhwa.nombreDeChapitresLus += value;
     return this.manhwaRepository.save(manhwa);
   }
+
+  async removeChapters(id: number, value: number): Promise<Manhwa> {
+    if (value < 0) {
+      throw new BadRequestException('La valeur ne peut pas être négative');
+    }
+
+    const manhwa = await this.manhwaRepository.findOneBy({ id });
+    if (!manhwa) {
+      throw new NotFoundException('Manhwa non trouvé');
+    }
+
+    if (manhwa.nombreDeChapitres - value < 0) {
+      throw new BadRequestException('Le nombre de chapitres ne peut pas être négatif');
+    }
+
+    if (manhwa.nombreDeChapitresLus > manhwa.nombreDeChapitres - value) {
+      throw new BadRequestException('Le nombre de chapitres lus dépasse le nouveau total');
+    }
+
+    manhwa.nombreDeChapitres -= value;
+    return this.manhwaRepository.save(manhwa);
+  }
 }
