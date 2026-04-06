@@ -9,7 +9,7 @@ export class DisableManhwaService {
     private readonly manhwaRepository: Repository<Manhwa>,
   ) {}
 
-  async disableManhwa(id: number): Promise<Manhwa> {
+  async disableManhwa(id: string): Promise<Manhwa> {
     const manhwa = await this.manhwaRepository.findOneBy({ id });
     if (!manhwa) {
       throw new NotFoundException('Manhwa non trouvé');

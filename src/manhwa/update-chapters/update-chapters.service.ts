@@ -9,7 +9,7 @@ export class UpdateChaptersManhwaService {
     private readonly manhwaRepository: Repository<Manhwa>,
   ) {}
 
-  async addChapters(id: number, value: number): Promise<Manhwa> {
+  async addChapters(id: string, value: number): Promise<Manhwa> {
     if (value < 0) {
       throw new BadRequestException('La valeur ne peut pas être négative');
     }
@@ -23,7 +23,7 @@ export class UpdateChaptersManhwaService {
     return this.manhwaRepository.save(manhwa);
   }
 
-  async addReadChapters(id: number, value: number): Promise<Manhwa> {
+  async addReadChapters(id: string, value: number): Promise<Manhwa> {
     if (value < 0) {
       throw new BadRequestException('La valeur ne peut pas être négative');
     }
@@ -41,7 +41,7 @@ export class UpdateChaptersManhwaService {
     return this.manhwaRepository.save(manhwa);
   }
 
-  async removeChapters(id: number, value: number): Promise<Manhwa> {
+  async removeChapters(id: string, value: number): Promise<Manhwa> {
     if (value < 0) {
       throw new BadRequestException('La valeur ne peut pas être négative');
     }
@@ -63,7 +63,7 @@ export class UpdateChaptersManhwaService {
     return this.manhwaRepository.save(manhwa);
   }
 
-  async removeReadChapters(id: number, value: number): Promise<Manhwa> {
+  async removeReadChapters(id: string, value: number): Promise<Manhwa> {
     if (value < 0) {
       throw new BadRequestException('La valeur ne peut pas être négative');
     }

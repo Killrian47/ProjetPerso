@@ -29,12 +29,12 @@ describe('DisableManhwa (US 13)', () => {
   // ✅ Scénario 1 — Désactiver un manhwa actif
   describe('Scénario 1 — Désactiver un manhwa actif', () => {
     it('devrait passer activé à false', async () => {
-      const manhwa = { id: 1, titre: 'Solo Leveling', activé: true, nombreDeChapitres: 200, nombreDeChapitresLus: 100, imageUrl: null };
+      const manhwa = { id: '550e8400-e29b-41d4-a716-446655440001', titre: 'Solo Leveling', activé: true, nombreDeChapitres: 200, nombreDeChapitresLus: 100, imageUrl: null };
 
       mockRepository.findOneBy.mockResolvedValue({ ...manhwa });
       mockRepository.save.mockResolvedValue({ ...manhwa, activé: false });
 
-      const result = await controller.disableManhwa(1);
+      const result = await controller.disableManhwa('550e8400-e29b-41d4-a716-446655440001');
 
       expect(result.activé).toBe(false);
       expect(mockRepository.save).toHaveBeenCalled();
@@ -46,7 +46,7 @@ describe('DisableManhwa (US 13)', () => {
     it('devrait retourner une erreur si le manhwa n\'existe pas', async () => {
       mockRepository.findOneBy.mockResolvedValue(null);
 
-      await expect(controller.disableManhwa(999)).rejects.toThrow(NotFoundException);
+      await expect(controller.disableManhwa('00000000-0000-0000-0000-000000000000')).rejects.toThrow(NotFoundException);
     });
   });
 });

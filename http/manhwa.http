@@ -21,7 +21,7 @@ Content-Type: application/json
 GET http://localhost:3000/getAllManhwa
 
 ### Ajouter des chapitres
-PATCH http://localhost:3000/manhwa/1/addChapters
+PATCH http://localhost:3000/manhwa/YOUR-UUID-HERE/addChapters
 Content-Type: application/json
 
 {
@@ -29,7 +29,7 @@ Content-Type: application/json
 }
 
 ### Ajouter des chapitres lus
-PATCH http://localhost:3000/manhwa/1/addReadChapters
+PATCH http://localhost:3000/manhwa/YOUR-UUID-HERE/addReadChapters
 Content-Type: application/json
 
 {
@@ -37,7 +37,7 @@ Content-Type: application/json
 }
 
 ### Supprimer des chapitres
-PATCH http://localhost:3000/manhwa/1/removeChapters
+PATCH http://localhost:3000/manhwa/YOUR-UUID-HERE/removeChapters
 Content-Type: application/json
 
 {
@@ -45,7 +45,7 @@ Content-Type: application/json
 }
 
 ### Supprimer des chapitres lus
-PATCH http://localhost:3000/manhwa/1/removeReadChapters
+PATCH http://localhost:3000/manhwa/YOUR-UUID-HERE/removeReadChapters
 Content-Type: application/json
 
 {
@@ -53,4 +53,4 @@ Content-Type: application/json
 }
 
 ### Désactiver un manhwa
-PATCH http://localhost:3000/disableManhwa/1
+PATCH http://localhost:3000/disableManhwa/YOUR-UUID-HERE

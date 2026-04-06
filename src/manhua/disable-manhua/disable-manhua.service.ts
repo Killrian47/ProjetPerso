@@ -9,7 +9,7 @@ export class DisableManhuaService {
     private readonly manhuaRepository: Repository<Manhua>,
   ) {}
 
-  async disableManhua(id: number): Promise<Manhua> {
+  async disableManhua(id: string): Promise<Manhua> {
     const manhua = await this.manhuaRepository.findOneBy({ id });
     if (!manhua) {
       throw new NotFoundException('Manhua non trouvé');

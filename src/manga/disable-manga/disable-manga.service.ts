@@ -9,7 +9,7 @@ export class DisableMangaService {
     private readonly mangaRepository: Repository<Manga>,
   ) {}
 
-  async disableManga(id: number): Promise<Manga> {
+  async disableManga(id: string): Promise<Manga> {
     const manga = await this.mangaRepository.findOneBy({ id });
     if (!manga) {
       throw new NotFoundException('Manga non trouvé');

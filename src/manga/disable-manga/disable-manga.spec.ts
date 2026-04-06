@@ -29,12 +29,12 @@ describe('DisableManga (US 12)', () => {
   // ✅ Scénario 1 — Désactiver un manga actif
   describe('Scénario 1 — Désactiver un manga actif', () => {
     it('devrait passer activé à false', async () => {
-      const manga = { id: 1, titre: 'One Piece', activé: true, nombreDeChapitres: 100, nombreDeChapitresLus: 50, imageUrl: null, auteur: 'Oda' };
+      const manga = { id: '550e8400-e29b-41d4-a716-446655440000', titre: 'One Piece', activé: true, nombreDeChapitres: 100, nombreDeChapitresLus: 50, imageUrl: null, auteur: 'Oda' };
 
       mockRepository.findOneBy.mockResolvedValue({ ...manga });
       mockRepository.save.mockResolvedValue({ ...manga, activé: false });
 
-      const result = await controller.disableManga(1);
+      const result = await controller.disableManga('550e8400-e29b-41d4-a716-446655440000');
 
       expect(result.activé).toBe(false);
       expect(mockRepository.save).toHaveBeenCalled();
@@ -46,7 +46,7 @@ describe('DisableManga (US 12)', () => {
     it('devrait retourner une erreur si le manga n\'existe pas', async () => {
       mockRepository.findOneBy.mockResolvedValue(null);
 
-      await expect(controller.disableManga(999)).rejects.toThrow(NotFoundException);
+      await expect(controller.disableManga('00000000-0000-0000-0000-000000000000')).rejects.toThrow(NotFoundException);
     });
   });
 });

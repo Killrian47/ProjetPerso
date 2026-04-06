@@ -9,7 +9,7 @@ export class UpdateChaptersManhuaService {
     private readonly manhuaRepository: Repository<Manhua>,
   ) {}
 
-  async addChapters(id: number, value: number): Promise<Manhua> {
+  async addChapters(id: string, value: number): Promise<Manhua> {
     if (value < 0) {
       throw new BadRequestException('La valeur ne peut pas être négative');
     }
@@ -23,7 +23,7 @@ export class UpdateChaptersManhuaService {
     return this.manhuaRepository.save(manhua);
   }
 
-  async addReadChapters(id: number, value: number): Promise<Manhua> {
+  async addReadChapters(id: string, value: number): Promise<Manhua> {
     if (value < 0) {
       throw new BadRequestException('La valeur ne peut pas être négative');
     }
@@ -41,7 +41,7 @@ export class UpdateChaptersManhuaService {
     return this.manhuaRepository.save(manhua);
   }
 
-  async removeChapters(id: number, value: number): Promise<Manhua> {
+  async removeChapters(id: string, value: number): Promise<Manhua> {
     if (value < 0) {
       throw new BadRequestException('La valeur ne peut pas être négative');
     }
@@ -63,7 +63,7 @@ export class UpdateChaptersManhuaService {
     return this.manhuaRepository.save(manhua);
   }
 
-  async removeReadChapters(id: number, value: number): Promise<Manhua> {
+  async removeReadChapters(id: string, value: number): Promise<Manhua> {
     if (value < 0) {
       throw new BadRequestException('La valeur ne peut pas être négative');
     }

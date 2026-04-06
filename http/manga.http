@@ -23,7 +23,7 @@ Content-Type: application/json
 GET http://localhost:3000/getAllManga
 
 ### Ajouter des chapitres
-PATCH http://localhost:3000/manga/1/addChapters
+PATCH http://localhost:3000/manga/YOUR-UUID-HERE/addChapters
 Content-Type: application/json
 
 {
@@ -31,7 +31,7 @@ Content-Type: application/json
 }
 
 ### Ajouter des chapitres lus
-PATCH http://localhost:3000/manga/1/addReadChapters
+PATCH http://localhost:3000/manga/YOUR-UUID-HERE/addReadChapters
 Content-Type: application/json
 
 {
@@ -39,7 +39,7 @@ Content-Type: application/json
 }
 
 ### Supprimer des chapitres
-PATCH http://localhost:3000/manga/1/removeChapters
+PATCH http://localhost:3000/manga/YOUR-UUID-HERE/removeChapters
 Content-Type: application/json
 
 {
@@ -47,7 +47,7 @@ Content-Type: application/json
 }
 
 ### Supprimer des chapitres lus
-PATCH http://localhost:3000/manga/1/removeReadChapters
+PATCH http://localhost:3000/manga/YOUR-UUID-HERE/removeReadChapters
 Content-Type: application/json
 
 {
@@ -55,4 +55,4 @@ Content-Type: application/json
 }
 
 ### Désactiver un manga
-PATCH http://localhost:3000/disableManga/1
+PATCH http://localhost:3000/disableManga/YOUR-UUID-HERE
