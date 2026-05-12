@@ -48,128 +48,128 @@ describe('ImportWorks (US 15 & 16)', () => {
   });
 
   // ===== US 15 — Import manga (source mangaplus) =====
+  describe('US 15 — Import manga', () => {
+    // ✅ Scénario 1 — Ajoute mangas manquants
+    describe('Scénario 1 — Ajoute mangas manquants', () => {
+      it('devrait importer les mangas depuis mangaplus', async () => {
+        const mangasFromSource = [
+          { titre: 'One Piece', auteur: 'Oda' },
+          { titre: 'Naruto', auteur: 'Kishimoto' },
+        ];
 
-  // ✅ Scénario 1 — Ajoute mangas manquants
-  describe('US 15 — Ajoute mangas manquants', () => {
-    it('devrait importer les mangas depuis mangaplus', async () => {
-      const mangasFromSource = [
-        { titre: 'One Piece', auteur: 'Oda' },
-        { titre: 'Naruto', auteur: 'Kishimoto' },
-      ];
+        mockScraperService.fetchManga.mockResolvedValue(mangasFromSource);
+        mockMangaRepository.findOneBy.mockResolvedValue(null);
+        mockMangaRepository.create.mockImplementation((data) => data);
+        mockMangaRepository.save.mockImplementation((data) => Promise.resolve({ id: 1, ...data }));
 
-      mockScraperService.fetchManga.mockResolvedValue(mangasFromSource);
-      mockMangaRepository.findOneBy.mockResolvedValue(null);
-      mockMangaRepository.create.mockImplementation((data) => data);
-      mockMangaRepository.save.mockImplementation((data) => Promise.resolve({ id: 1, ...data }));
+        const result = await controller.importManga();
 
-      const result = await controller.importManga();
+        expect(mockScraperService.fetchManga).toHaveBeenCalled();
+        expect(mockMangaRepository.save).toHaveBeenCalledTimes(2);
+        expect(result).toHaveLength(2);
+      });
+    });
 
-      expect(mockScraperService.fetchManga).toHaveBeenCalled();
-      expect(mockMangaRepository.save).toHaveBeenCalledTimes(2);
-      expect(result).toHaveLength(2);
+    // ❌ Scénario 2 — Pas de duplication manga
+    describe('Scénario 2 — Pas de duplication manga', () => {
+      it('ne devrait pas importer un manga déjà existant', async () => {
+        const mangasFromSource = [
+          { titre: 'One Piece', auteur: 'Oda' },
+        ];
+
+        const existingManga = { id: 1, titre: 'One Piece', auteur: 'Oda', nombreDeChapitres: 1100 };
+
+        mockScraperService.fetchManga.mockResolvedValue(mangasFromSource);
+        mockMangaRepository.findOneBy.mockResolvedValue(existingManga);
+
+        const result = await controller.importManga();
+
+        expect(mockMangaRepository.save).not.toHaveBeenCalled();
+        expect(result).toHaveLength(0);
+      });
     });
   });
 
-  // ❌ Scénario 2 — Pas de duplication manga
-  describe('US 15 — Pas de duplication manga', () => {
-    it('ne devrait pas importer un manga déjà existant', async () => {
-      const mangasFromSource = [
-        { titre: 'One Piece', auteur: 'Oda' },
-      ];
+  // ===== US 16 — Import manhwa / manhua (source raijinscan) =====
+  describe('US 16 — Import manhwa / manhua', () => {
+    // ✅ Scénario 1 — Ajoute manhwas manquants
+    describe('Scénario 1 — Ajoute manhwas manquants', () => {
+      it('devrait importer les manhwas depuis raijinscan', async () => {
+        const manhwasFromSource = [
+          { titre: 'Solo Leveling' },
+          { titre: 'Tower of God' },
+        ];
 
-      const existingManga = { id: 1, titre: 'One Piece', auteur: 'Oda', nombreDeChapitres: 1100 };
+        mockScraperService.fetchManhwa.mockResolvedValue(manhwasFromSource);
+        mockManhwaRepository.findOneBy.mockResolvedValue(null);
+        mockManhwaRepository.create.mockImplementation((data) => data);
+        mockManhwaRepository.save.mockImplementation((data) => Promise.resolve({ id: 1, ...data }));
 
-      mockScraperService.fetchManga.mockResolvedValue(mangasFromSource);
-      mockMangaRepository.findOneBy.mockResolvedValue(existingManga);
+        const result = await controller.importManhwa();
 
-      const result = await controller.importManga();
-
-      expect(mockMangaRepository.save).not.toHaveBeenCalled();
-      expect(result).toHaveLength(0);
+        expect(mockScraperService.fetchManhwa).toHaveBeenCalled();
+        expect(mockManhwaRepository.save).toHaveBeenCalledTimes(2);
+        expect(result).toHaveLength(2);
+      });
     });
-  });
 
-  // ===== US 16 — Import manhwa (source raijinscan) =====
+    // ❌ Scénario 2 — Pas de duplication manhwa
+    describe('Scénario 2 — Pas de duplication manhwa', () => {
+      it('ne devrait pas importer un manhwa déjà existant', async () => {
+        const manhwasFromSource = [
+          { titre: 'Solo Leveling' },
+        ];
 
-  // ✅ Scénario 3 — Ajoute manhwas manquants
-  describe('US 16 — Ajoute manhwas manquants', () => {
-    it('devrait importer les manhwas depuis raijinscan', async () => {
-      const manhwasFromSource = [
-        { titre: 'Solo Leveling' },
-        { titre: 'Tower of God' },
-      ];
+        const existingManhwa = { id: 1, titre: 'Solo Leveling', nombreDeChapitres: 200 };
 
-      mockScraperService.fetchManhwa.mockResolvedValue(manhwasFromSource);
-      mockManhwaRepository.findOneBy.mockResolvedValue(null);
-      mockManhwaRepository.create.mockImplementation((data) => data);
-      mockManhwaRepository.save.mockImplementation((data) => Promise.resolve({ id: 1, ...data }));
+        mockScraperService.fetchManhwa.mockResolvedValue(manhwasFromSource);
+        mockManhwaRepository.findOneBy.mockResolvedValue(existingManhwa);
 
-      const result = await controller.importManhwa();
+        const result = await controller.importManhwa();
 
-      expect(mockScraperService.fetchManhwa).toHaveBeenCalled();
-      expect(mockManhwaRepository.save).toHaveBeenCalledTimes(2);
-      expect(result).toHaveLength(2);
+        expect(mockManhwaRepository.save).not.toHaveBeenCalled();
+        expect(result).toHaveLength(0);
+      });
     });
-  });
 
-  // ❌ Scénario 4 — Pas de duplication manhwa
-  describe('US 16 — Pas de duplication manhwa', () => {
-    it('ne devrait pas importer un manhwa déjà existant', async () => {
-      const manhwasFromSource = [
-        { titre: 'Solo Leveling' },
-      ];
+    // ✅ Scénario 3 — Ajoute manhuas manquants
+    describe('Scénario 3 — Ajoute manhuas manquants', () => {
+      it('devrait importer les manhuas depuis raijinscan', async () => {
+        const manhuasFromSource = [
+          { titre: 'Soul Land' },
+          { titre: 'Tales of Demons and Gods' },
+        ];
 
-      const existingManhwa = { id: 1, titre: 'Solo Leveling', nombreDeChapitres: 200 };
+        mockScraperService.fetchManhua.mockResolvedValue(manhuasFromSource);
+        mockManhuaRepository.findOneBy.mockResolvedValue(null);
+        mockManhuaRepository.create.mockImplementation((data) => data);
+        mockManhuaRepository.save.mockImplementation((data) => Promise.resolve({ id: 1, ...data }));
 
-      mockScraperService.fetchManhwa.mockResolvedValue(manhwasFromSource);
-      mockManhwaRepository.findOneBy.mockResolvedValue(existingManhwa);
+        const result = await controller.importManhua();
 
-      const result = await controller.importManhwa();
-
-      expect(mockManhwaRepository.save).not.toHaveBeenCalled();
-      expect(result).toHaveLength(0);
+        expect(mockScraperService.fetchManhua).toHaveBeenCalled();
+        expect(mockManhuaRepository.save).toHaveBeenCalledTimes(2);
+        expect(result).toHaveLength(2);
+      });
     });
-  });
 
-  // ===== US 16 — Import manhua (source raijinscan) =====
+    // ❌ Scénario 4 — Pas de duplication manhua
+    describe('Scénario 4 — Pas de duplication manhua', () => {
+      it('ne devrait pas importer un manhua déjà existant', async () => {
+        const manhuasFromSource = [
+          { titre: 'Soul Land' },
+        ];
 
-  // ✅ Scénario 5 — Ajoute manhuas manquants
-  describe('US 16 — Ajoute manhuas manquants', () => {
-    it('devrait importer les manhuas depuis raijinscan', async () => {
-      const manhuasFromSource = [
-        { titre: 'Soul Land' },
-        { titre: 'Tales of Demons and Gods' },
-      ];
+        const existingManhua = { id: 1, titre: 'Soul Land', nombreDeChapitres: 300 };
 
-      mockScraperService.fetchManhua.mockResolvedValue(manhuasFromSource);
-      mockManhuaRepository.findOneBy.mockResolvedValue(null);
-      mockManhuaRepository.create.mockImplementation((data) => data);
-      mockManhuaRepository.save.mockImplementation((data) => Promise.resolve({ id: 1, ...data }));
+        mockScraperService.fetchManhua.mockResolvedValue(manhuasFromSource);
+        mockManhuaRepository.findOneBy.mockResolvedValue(existingManhua);
 
-      const result = await controller.importManhua();
+        const result = await controller.importManhua();
 
-      expect(mockScraperService.fetchManhua).toHaveBeenCalled();
-      expect(mockManhuaRepository.save).toHaveBeenCalledTimes(2);
-      expect(result).toHaveLength(2);
-    });
-  });
-
-  // ❌ Scénario 6 — Pas de duplication manhua
-  describe('US 16 — Pas de duplication manhua', () => {
-    it('ne devrait pas importer un manhua déjà existant', async () => {
-      const manhuasFromSource = [
-        { titre: 'Soul Land' },
-      ];
-
-      const existingManhua = { id: 1, titre: 'Soul Land', nombreDeChapitres: 300 };
-
-      mockScraperService.fetchManhua.mockResolvedValue(manhuasFromSource);
-      mockManhuaRepository.findOneBy.mockResolvedValue(existingManhua);
-
-      const result = await controller.importManhua();
-
-      expect(mockManhuaRepository.save).not.toHaveBeenCalled();
-      expect(result).toHaveLength(0);
+        expect(mockManhuaRepository.save).not.toHaveBeenCalled();
+        expect(result).toHaveLength(0);
+      });
     });
   });
 });

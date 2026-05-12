@@ -24,33 +24,36 @@ describe('GetAllManga (US 5)', () => {
     jest.clearAllMocks();
   });
 
-  // ✅ Scénario 1 — Des mangas actifs ou non existent
-  describe('Scénario 1 — Des mangas existent', () => {
-    it('devrait retourner tous les mangas activés ou non', async () => {
-      const mangas = [
-        { id: 1, titre: 'One Piece', auteur: 'Oda', activé: true, nombreDeChapitres: 1100, nombreDeChapitresLus: 500, imageUrl: null },
-        { id: 2, titre: 'Bleach', auteur: 'Kubo', activé: false, nombreDeChapitres: 686, nombreDeChapitresLus: 686, imageUrl: null },
-      ];
+  // ===== US 5 — Voir tous les mangas =====
+  describe('US 5 — Voir tous les mangas', () => {
+    // ✅ Scénario 1 — Des mangas existent
+    describe('Scénario 1 — Des mangas existent', () => {
+      it('devrait retourner tous les mangas activés ou non', async () => {
+        const mangas = [
+          { id: 1, titre: 'One Piece', auteur: 'Oda', activé: true, nombreDeChapitres: 1100, nombreDeChapitresLus: 500, imageUrl: null },
+          { id: 2, titre: 'Bleach', auteur: 'Kubo', activé: false, nombreDeChapitres: 686, nombreDeChapitresLus: 686, imageUrl: null },
+        ];
 
-      mockRepository.find.mockResolvedValue(mangas);
+        mockRepository.find.mockResolvedValue(mangas);
 
-      const result = await controller.getAllManga();
+        const result = await controller.getAllManga();
 
-      expect(result).toEqual(mangas);
-      expect(result).toHaveLength(2);
-      expect(mockRepository.find).toHaveBeenCalled();
+        expect(result).toEqual(mangas);
+        expect(result).toHaveLength(2);
+        expect(mockRepository.find).toHaveBeenCalled();
+      });
     });
-  });
 
-  // ❌ Scénario 2 — Aucun manga
-  describe('Scénario 2 — Aucun manga', () => {
-    it('devrait retourner un tableau vide', async () => {
-      mockRepository.find.mockResolvedValue([]);
+    // ❌ Scénario 2 — Aucun manga
+    describe('Scénario 2 — Aucun manga', () => {
+      it('devrait retourner un tableau vide', async () => {
+        mockRepository.find.mockResolvedValue([]);
 
-      const result = await controller.getAllManga();
+        const result = await controller.getAllManga();
 
-      expect(result).toEqual([]);
-      expect(result).toHaveLength(0);
+        expect(result).toEqual([]);
+        expect(result).toHaveLength(0);
+      });
     });
   });
 });

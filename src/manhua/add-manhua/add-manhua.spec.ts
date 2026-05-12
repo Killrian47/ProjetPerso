@@ -34,105 +34,108 @@ describe('AddManhua (US 3)', () => {
     jest.clearAllMocks();
   });
 
-  // ✅ Scénario 1 — Ajout valide
-  describe('Scénario 1 — Ajout valide', () => {
-    it('devrait retourner 201 et sauvegarder le manhua', async () => {
-      const dto: AddManhuaDto = {
-        titre: 'Soul Land',
-        nombreDeChapitres: 300,
-      };
+  // ===== US 3 — Ajouter un manhua =====
+  describe('US 3 — Ajouter un manhua', () => {
+    // ✅ Scénario 1 — Ajout valide
+    describe('Scénario 1 — Ajout valide', () => {
+      it('devrait retourner 201 et sauvegarder le manhua', async () => {
+        const dto: AddManhuaDto = {
+          titre: 'Soul Land',
+          nombreDeChapitres: 300,
+        };
 
-      const savedManhua = {
-        id: 1,
-        ...dto,
-        nombreDeChapitresLus: 0,
-        activé: true,
-        imageUrl: null,
-      };
+        const savedManhua = {
+          id: 1,
+          ...dto,
+          nombreDeChapitresLus: 0,
+          activé: true,
+          imageUrl: null,
+        };
 
-      mockRepository.create.mockReturnValue(savedManhua);
-      mockRepository.save.mockResolvedValue(savedManhua);
+        mockRepository.create.mockReturnValue(savedManhua);
+        mockRepository.save.mockResolvedValue(savedManhua);
 
-      const result = await controller.addManhua(dto);
+        const result = await controller.addManhua(dto);
 
-      expect(result).toEqual(savedManhua);
-      expect(mockRepository.save).toHaveBeenCalled();
+        expect(result).toEqual(savedManhua);
+        expect(mockRepository.save).toHaveBeenCalled();
+      });
     });
-  });
 
-  // ❌ Scénario 2 — Champ manquant (titre)
-  describe('Scénario 2 — Champ manquant', () => {
-    it('devrait retourner 400 si le titre est manquant', async () => {
-      const dto = {
-        nombreDeChapitres: 300,
-      } as AddManhuaDto;
+    // ❌ Scénario 2 — Champ manquant (titre)
+    describe('Scénario 2 — Champ manquant', () => {
+      it('devrait retourner 400 si le titre est manquant', async () => {
+        const dto = {
+          nombreDeChapitres: 300,
+        } as AddManhuaDto;
 
-      mockRepository.save.mockRejectedValue(new BadRequestException());
+        mockRepository.save.mockRejectedValue(new BadRequestException());
 
-      await expect(controller.addManhua(dto)).rejects.toThrow();
+        await expect(controller.addManhua(dto)).rejects.toThrow();
+      });
     });
-  });
 
-  // 🖼️ Scénario 3 — Upload image
-  describe('Scénario 3 — Upload image Cloudinary', () => {
-    it("devrait stocker l'URL de l'image après upload", async () => {
-      const dto: AddManhuaDto = {
-        titre: 'Tales of Demons and Gods',
-        nombreDeChapitres: 450,
-      };
+    // 🖼️ Scénario 3 — Upload image
+    describe('Scénario 3 — Upload image Cloudinary', () => {
+      it("devrait stocker l'URL de l'image après upload", async () => {
+        const dto: AddManhuaDto = {
+          titre: 'Tales of Demons and Gods',
+          nombreDeChapitres: 450,
+        };
 
-      const file = {
-        fieldname: 'image',
-        originalname: 'tales.jpg',
-        mimetype: 'image/jpeg',
-        buffer: Buffer.from('fake-image-bytes'),
-        size: 16,
-      } as unknown as Express.Multer.File;
+        const file = {
+          fieldname: 'image',
+          originalname: 'tales.jpg',
+          mimetype: 'image/jpeg',
+          buffer: Buffer.from('fake-image-bytes'),
+          size: 16,
+        } as unknown as Express.Multer.File;
 
-      const cloudinaryUrl = 'https://res.cloudinary.com/demo/tales.jpg';
-      mockCloudinaryService.uploadImage.mockResolvedValue(cloudinaryUrl);
+        const cloudinaryUrl = 'https://res.cloudinary.com/demo/tales.jpg';
+        mockCloudinaryService.uploadImage.mockResolvedValue(cloudinaryUrl);
 
-      const savedManhua = {
-        id: 2,
-        titre: dto.titre,
-        nombreDeChapitres: dto.nombreDeChapitres,
-        nombreDeChapitresLus: 0,
-        activé: true,
-        imageUrl: cloudinaryUrl,
-      };
+        const savedManhua = {
+          id: 2,
+          titre: dto.titre,
+          nombreDeChapitres: dto.nombreDeChapitres,
+          nombreDeChapitresLus: 0,
+          activé: true,
+          imageUrl: cloudinaryUrl,
+        };
 
-      mockRepository.create.mockReturnValue(savedManhua);
-      mockRepository.save.mockResolvedValue(savedManhua);
+        mockRepository.create.mockReturnValue(savedManhua);
+        mockRepository.save.mockResolvedValue(savedManhua);
 
-      const result = await controller.addManhua(dto, file);
+        const result = await controller.addManhua(dto, file);
 
-      expect(result.imageUrl).toBe(cloudinaryUrl);
-      expect(mockCloudinaryService.uploadImage).toHaveBeenCalledWith(file);
+        expect(result.imageUrl).toBe(cloudinaryUrl);
+        expect(mockCloudinaryService.uploadImage).toHaveBeenCalledWith(file);
+      });
     });
-  });
 
-  // 🔢 Scénario 4 — Valeur par défaut
-  describe('Scénario 4 — Valeur par défaut chapitres_lus', () => {
-    it('devrait avoir nombreDeChapitresLus = 0 par défaut', async () => {
-      const dto: AddManhuaDto = {
-        titre: 'Battle Through the Heavens',
-        nombreDeChapitres: 800,
-      };
+    // 🔢 Scénario 4 — Valeur par défaut
+    describe('Scénario 4 — Valeur par défaut chapitres_lus', () => {
+      it('devrait avoir nombreDeChapitresLus = 0 par défaut', async () => {
+        const dto: AddManhuaDto = {
+          titre: 'Battle Through the Heavens',
+          nombreDeChapitres: 800,
+        };
 
-      const savedManhua = {
-        id: 3,
-        ...dto,
-        nombreDeChapitresLus: 0,
-        activé: true,
-        imageUrl: null,
-      };
+        const savedManhua = {
+          id: 3,
+          ...dto,
+          nombreDeChapitresLus: 0,
+          activé: true,
+          imageUrl: null,
+        };
 
-      mockRepository.create.mockReturnValue(savedManhua);
-      mockRepository.save.mockResolvedValue(savedManhua);
+        mockRepository.create.mockReturnValue(savedManhua);
+        mockRepository.save.mockResolvedValue(savedManhua);
 
-      const result = await controller.addManhua(dto);
+        const result = await controller.addManhua(dto);
 
-      expect(result.nombreDeChapitresLus).toBe(0);
+        expect(result.nombreDeChapitresLus).toBe(0);
+      });
     });
   });
 });

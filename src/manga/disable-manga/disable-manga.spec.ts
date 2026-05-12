@@ -26,27 +26,30 @@ describe('DisableManga (US 12)', () => {
     jest.clearAllMocks();
   });
 
-  // ✅ Scénario 1 — Désactiver un manga actif
-  describe('Scénario 1 — Désactiver un manga actif', () => {
-    it('devrait passer activé à false', async () => {
-      const manga = { id: '550e8400-e29b-41d4-a716-446655440000', titre: 'One Piece', activé: true, nombreDeChapitres: 100, nombreDeChapitresLus: 50, imageUrl: null, auteur: 'Oda' };
+  // ===== US 12 — Désactiver un manga =====
+  describe('US 12 — Désactiver un manga', () => {
+    // ✅ Scénario 1 — Désactiver un manga actif
+    describe('Scénario 1 — Désactiver un manga actif', () => {
+      it('devrait passer activé à false', async () => {
+        const manga = { id: '550e8400-e29b-41d4-a716-446655440000', titre: 'One Piece', activé: true, nombreDeChapitres: 100, nombreDeChapitresLus: 50, imageUrl: null, auteur: 'Oda' };
 
-      mockRepository.findOneBy.mockResolvedValue({ ...manga });
-      mockRepository.save.mockResolvedValue({ ...manga, activé: false });
+        mockRepository.findOneBy.mockResolvedValue({ ...manga });
+        mockRepository.save.mockResolvedValue({ ...manga, activé: false });
 
-      const result = await controller.disableManga('550e8400-e29b-41d4-a716-446655440000');
+        const result = await controller.disableManga('550e8400-e29b-41d4-a716-446655440000');
 
-      expect(result.activé).toBe(false);
-      expect(mockRepository.save).toHaveBeenCalled();
+        expect(result.activé).toBe(false);
+        expect(mockRepository.save).toHaveBeenCalled();
+      });
     });
-  });
 
-  // ❌ Scénario 2 — Manga inexistant
-  describe('Scénario 2 — Manga inexistant', () => {
-    it('devrait retourner une erreur si le manga n\'existe pas', async () => {
-      mockRepository.findOneBy.mockResolvedValue(null);
+    // ❌ Scénario 2 — Manga inexistant
+    describe('Scénario 2 — Manga inexistant', () => {
+      it("devrait retourner une erreur si le manga n'existe pas", async () => {
+        mockRepository.findOneBy.mockResolvedValue(null);
 
-      await expect(controller.disableManga('00000000-0000-0000-0000-000000000000')).rejects.toThrow(NotFoundException);
+        await expect(controller.disableManga('00000000-0000-0000-0000-000000000000')).rejects.toThrow(NotFoundException);
+      });
     });
   });
 });
