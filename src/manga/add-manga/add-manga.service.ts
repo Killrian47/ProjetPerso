@@ -9,14 +9,19 @@ export class AddMangaService {
     @Inject('MangaRepository')
     private readonly mangaRepository: Repository<Manga>,
     @Inject('CloudinaryService')
-    private readonly cloudinaryService: { uploadImage(data: string): Promise<string> },
+    private readonly cloudinaryService: {
+      uploadImage(file: Express.Multer.File): Promise<string>;
+    },
   ) {}
 
-  async addManga(dto: AddMangaDto): Promise<Manga> {
-    let imageUrl: string | undefined;
+  async addManga(
+    dto: AddMangaDto,
+    image?: Express.Multer.File,
+  ): Promise<Manga> {
+    let imageUrl: string | null = null;
 
-    if (dto.image) {
-      imageUrl = await this.cloudinaryService.uploadImage(dto.image);
+    if (image) {
+      imageUrl = await this.cloudinaryService.uploadImage(image);
     }
 
     const manga = this.mangaRepository.create({
@@ -25,7 +30,7 @@ export class AddMangaService {
       nombreDeChapitres: dto.nombreDeChapitres ?? 0,
       nombreDeChapitresLus: 0,
       activé: true,
-      imageUrl: imageUrl ?? null,
+      imageUrl,
     });
 
     return this.mangaRepository.save(manga);

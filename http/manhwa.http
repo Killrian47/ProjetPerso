@@ -7,15 +7,29 @@ Content-Type: application/json
   "nombreDeChapitres": 200
 }
 
-### Ajouter un manhwa avec image
+### Ajouter un manhwa avec image (multipart)
+# Exemple curl :
+#   curl -X POST http://localhost:3000/addManhwa \
+#     -F "titre=Tower of God" \
+#     -F "nombreDeChapitres=550" \
+#     -F "image=@/chemin/local/tog.jpg"
 POST http://localhost:3000/addManhwa
-Content-Type: application/json
+Content-Type: multipart/form-data; boundary=----Boundary
 
-{
-  "titre": "Tower of God",
-  "nombreDeChapitres": 550,
-  "image": "base64-image-data"
-}
+------Boundary
+Content-Disposition: form-data; name="titre"
+
+Tower of God
+------Boundary
+Content-Disposition: form-data; name="nombreDeChapitres"
+
+550
+------Boundary
+Content-Disposition: form-data; name="image"; filename="tog.jpg"
+Content-Type: image/jpeg
+
+< ./tog.jpg
+------Boundary--
 
 ### Voir tous les manhwas
 GET http://localhost:3000/getAllManhwa

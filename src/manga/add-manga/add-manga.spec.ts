@@ -82,8 +82,15 @@ describe('AddManga (US 1)', () => {
         titre: 'Naruto',
         auteur: 'Masashi Kishimoto',
         nombreDeChapitres: 700,
-        image: 'base64-image-data',
       };
+
+      const file = {
+        fieldname: 'image',
+        originalname: 'naruto.jpg',
+        mimetype: 'image/jpeg',
+        buffer: Buffer.from('fake-image-bytes'),
+        size: 16,
+      } as unknown as Express.Multer.File;
 
       const cloudinaryUrl = 'https://res.cloudinary.com/demo/naruto.jpg';
       mockCloudinaryService.uploadImage.mockResolvedValue(cloudinaryUrl);
@@ -101,10 +108,10 @@ describe('AddManga (US 1)', () => {
       mockRepository.create.mockReturnValue(savedManga);
       mockRepository.save.mockResolvedValue(savedManga);
 
-      const result = await controller.addManga(dto);
+      const result = await controller.addManga(dto, file);
 
       expect(result.imageUrl).toBe(cloudinaryUrl);
-      expect(mockCloudinaryService.uploadImage).toHaveBeenCalledWith(dto.image);
+      expect(mockCloudinaryService.uploadImage).toHaveBeenCalledWith(file);
     });
   });
 

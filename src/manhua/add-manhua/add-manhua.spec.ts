@@ -79,8 +79,15 @@ describe('AddManhua (US 3)', () => {
       const dto: AddManhuaDto = {
         titre: 'Tales of Demons and Gods',
         nombreDeChapitres: 450,
-        image: 'base64-image-data',
       };
+
+      const file = {
+        fieldname: 'image',
+        originalname: 'tales.jpg',
+        mimetype: 'image/jpeg',
+        buffer: Buffer.from('fake-image-bytes'),
+        size: 16,
+      } as unknown as Express.Multer.File;
 
       const cloudinaryUrl = 'https://res.cloudinary.com/demo/tales.jpg';
       mockCloudinaryService.uploadImage.mockResolvedValue(cloudinaryUrl);
@@ -97,10 +104,10 @@ describe('AddManhua (US 3)', () => {
       mockRepository.create.mockReturnValue(savedManhua);
       mockRepository.save.mockResolvedValue(savedManhua);
 
-      const result = await controller.addManhua(dto);
+      const result = await controller.addManhua(dto, file);
 
       expect(result.imageUrl).toBe(cloudinaryUrl);
-      expect(mockCloudinaryService.uploadImage).toHaveBeenCalledWith(dto.image);
+      expect(mockCloudinaryService.uploadImage).toHaveBeenCalledWith(file);
     });
   });
 

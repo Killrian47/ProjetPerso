@@ -8,16 +8,34 @@ Content-Type: application/json
   "nombreDeChapitres": 1100
 }
 
-### Ajouter un manga avec image
+### Ajouter un manga avec image (multipart, depuis un client compatible REST Client / curl)
+# Exemple curl :
+#   curl -X POST http://localhost:3000/addManga \
+#     -F "titre=Naruto" \
+#     -F "auteur=Masashi Kishimoto" \
+#     -F "nombreDeChapitres=700" \
+#     -F "image=@/chemin/local/naruto.jpg"
 POST http://localhost:3000/addManga
-Content-Type: application/json
+Content-Type: multipart/form-data; boundary=----Boundary
 
-{
-  "titre": "Naruto",
-  "auteur": "Masashi Kishimoto",
-  "nombreDeChapitres": 700,
-  "image": "base64-image-data"
-}
+------Boundary
+Content-Disposition: form-data; name="titre"
+
+Naruto
+------Boundary
+Content-Disposition: form-data; name="auteur"
+
+Masashi Kishimoto
+------Boundary
+Content-Disposition: form-data; name="nombreDeChapitres"
+
+700
+------Boundary
+Content-Disposition: form-data; name="image"; filename="naruto.jpg"
+Content-Type: image/jpeg
+
+< ./naruto.jpg
+------Boundary--
 
 ### Voir tous les mangas
 GET http://localhost:3000/getAllManga

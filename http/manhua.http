@@ -7,15 +7,29 @@ Content-Type: application/json
   "nombreDeChapitres": 300
 }
 
-### Ajouter un manhua avec image
+### Ajouter un manhua avec image (multipart)
+# Exemple curl :
+#   curl -X POST http://localhost:3000/addManhua \
+#     -F "titre=Tales of Demons and Gods" \
+#     -F "nombreDeChapitres=450" \
+#     -F "image=@/chemin/local/tales.jpg"
 POST http://localhost:3000/addManhua
-Content-Type: application/json
+Content-Type: multipart/form-data; boundary=----Boundary
 
-{
-  "titre": "Tales of Demons and Gods",
-  "nombreDeChapitres": 450,
-  "image": "base64-image-data"
-}
+------Boundary
+Content-Disposition: form-data; name="titre"
+
+Tales of Demons and Gods
+------Boundary
+Content-Disposition: form-data; name="nombreDeChapitres"
+
+450
+------Boundary
+Content-Disposition: form-data; name="image"; filename="tales.jpg"
+Content-Type: image/jpeg
+
+< ./tales.jpg
+------Boundary--
 
 ### Voir tous les manhuas
 GET http://localhost:3000/getAllManhua

@@ -79,8 +79,15 @@ describe('AddManhwa (US 2)', () => {
       const dto: AddManhwaDto = {
         titre: 'Tower of God',
         nombreDeChapitres: 550,
-        image: 'base64-image-data',
       };
+
+      const file = {
+        fieldname: 'image',
+        originalname: 'tog.jpg',
+        mimetype: 'image/jpeg',
+        buffer: Buffer.from('fake-image-bytes'),
+        size: 16,
+      } as unknown as Express.Multer.File;
 
       const cloudinaryUrl = 'https://res.cloudinary.com/demo/tower-of-god.jpg';
       mockCloudinaryService.uploadImage.mockResolvedValue(cloudinaryUrl);
@@ -97,10 +104,10 @@ describe('AddManhwa (US 2)', () => {
       mockRepository.create.mockReturnValue(savedManhwa);
       mockRepository.save.mockResolvedValue(savedManhwa);
 
-      const result = await controller.addManhwa(dto);
+      const result = await controller.addManhwa(dto, file);
 
       expect(result.imageUrl).toBe(cloudinaryUrl);
-      expect(mockCloudinaryService.uploadImage).toHaveBeenCalledWith(dto.image);
+      expect(mockCloudinaryService.uploadImage).toHaveBeenCalledWith(file);
     });
   });
 

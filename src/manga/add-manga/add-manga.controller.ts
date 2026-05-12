@@ -1,4 +1,11 @@
-import { Controller, Post, Body } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  UploadedFile,
+  UseInterceptors,
+} from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { AddMangaService } from './add-manga.service';
 import { AddMangaDto } from './add-manga.dto';
 import { Manga } from '../domain/manga.entity';
@@ -8,7 +15,11 @@ export class AddMangaController {
   constructor(private readonly addMangaService: AddMangaService) {}
 
   @Post('/addManga')
-  async addManga(@Body() dto: AddMangaDto): Promise<Manga> {
-    return this.addMangaService.addManga(dto);
+  @UseInterceptors(FileInterceptor('image'))
+  async addManga(
+    @Body() dto: AddMangaDto,
+    @UploadedFile() image?: Express.Multer.File,
+  ): Promise<Manga> {
+    return this.addMangaService.addManga(dto, image);
   }
 }

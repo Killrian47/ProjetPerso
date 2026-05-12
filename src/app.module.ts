@@ -48,6 +48,9 @@ import { GetAllReadingService } from './reading/get-all-reading/get-all-reading.
 import { ImportWorksController } from './import/import-works/import-works.controller.js';
 import { ImportWorksService } from './import/import-works/import-works.service.js';
 
+// Cloudinary
+import { CloudinaryService } from './cloudinary/cloudinary.service.js';
+
 @Module({
   imports: [
     ConfigModule.forRoot(),
@@ -104,15 +107,11 @@ import { ImportWorksService } from './import/import-works/import-works.service.j
       useFactory: (dataSource: DataSource) => dataSource.getRepository(Manhua),
       inject: [DataSource],
     },
-    // Cloudinary placeholder
+    // Cloudinary
+    CloudinaryService,
     {
       provide: 'CloudinaryService',
-      useValue: {
-        async uploadImage(data: string): Promise<string> {
-          // TODO: implémenter avec Cloudinary
-          return `https://res.cloudinary.com/placeholder/${Date.now()}.jpg`;
-        },
-      },
+      useExisting: CloudinaryService,
     },
     // Scraper placeholder
     {

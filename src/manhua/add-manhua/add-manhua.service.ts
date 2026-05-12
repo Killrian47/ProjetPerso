@@ -9,14 +9,19 @@ export class AddManhuaService {
     @Inject('ManhuaRepository')
     private readonly manhuaRepository: Repository<Manhua>,
     @Inject('CloudinaryService')
-    private readonly cloudinaryService: { uploadImage(data: string): Promise<string> },
+    private readonly cloudinaryService: {
+      uploadImage(file: Express.Multer.File): Promise<string>;
+    },
   ) {}
 
-  async addManhua(dto: AddManhuaDto): Promise<Manhua> {
-    let imageUrl: string | undefined;
+  async addManhua(
+    dto: AddManhuaDto,
+    image?: Express.Multer.File,
+  ): Promise<Manhua> {
+    let imageUrl: string | null = null;
 
-    if (dto.image) {
-      imageUrl = await this.cloudinaryService.uploadImage(dto.image);
+    if (image) {
+      imageUrl = await this.cloudinaryService.uploadImage(image);
     }
 
     const manhua = this.manhuaRepository.create({
@@ -24,7 +29,7 @@ export class AddManhuaService {
       nombreDeChapitres: dto.nombreDeChapitres ?? 0,
       nombreDeChapitresLus: 0,
       activé: true,
-      imageUrl: imageUrl ?? null,
+      imageUrl,
     } as Manhua);
 
     return this.manhuaRepository.save(manhua) as Promise<Manhua>;
