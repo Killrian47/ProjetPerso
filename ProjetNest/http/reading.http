@@ -1,0 +1,2 @@
+### Voir toutes les lectures (oeuvres actives)
+GET http://localhost:3000/allReading

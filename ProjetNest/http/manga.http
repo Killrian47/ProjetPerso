@@ -1,0 +1,76 @@
+### Ajouter un manga
+POST http://localhost:3000/addManga
+Content-Type: application/json
+
+{
+  "titre": "One Piece",
+  "auteur": "Eiichiro Oda",
+  "nombreDeChapitres": 1100
+}
+
+### Ajouter un manga avec image (multipart, depuis un client compatible REST Client / curl)
+# Exemple curl :
+#   curl -X POST http://localhost:3000/addManga \
+#     -F "titre=Naruto" \
+#     -F "auteur=Masashi Kishimoto" \
+#     -F "nombreDeChapitres=700" \
+#     -F "image=@/chemin/local/naruto.jpg"
+POST http://localhost:3000/addManga
+Content-Type: multipart/form-data; boundary=----Boundary
+
+------Boundary
+Content-Disposition: form-data; name="titre"
+
+Naruto
+------Boundary
+Content-Disposition: form-data; name="auteur"
+
+Masashi Kishimoto
+------Boundary
+Content-Disposition: form-data; name="nombreDeChapitres"
+
+700
+------Boundary
+Content-Disposition: form-data; name="image"; filename="naruto.jpg"
+Content-Type: image/jpeg
+
+< ./naruto.jpg
+------Boundary--
+
+### Voir tous les mangas
+GET http://localhost:3000/getAllManga
+
+### Ajouter des chapitres
+PATCH http://localhost:3000/manga/YOUR-UUID-HERE/addChapters
+Content-Type: application/json
+
+{
+  "value": 5
+}
+
+### Ajouter des chapitres lus
+PATCH http://localhost:3000/manga/YOUR-UUID-HERE/addReadChapters
+Content-Type: application/json
+
+{
+  "value": 3
+}
+
+### Supprimer des chapitres
+PATCH http://localhost:3000/manga/YOUR-UUID-HERE/removeChapters
+Content-Type: application/json
+
+{
+  "value": 2
+}
+
+### Supprimer des chapitres lus
+PATCH http://localhost:3000/manga/YOUR-UUID-HERE/removeReadChapters
+Content-Type: application/json
+
+{
+  "value": 1
+}
+
+### Désactiver un manga
+PATCH http://localhost:3000/disableManga/YOUR-UUID-HERE
